@@ -2,61 +2,107 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Animación scroll derecha</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animación global scroll</title>
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 40px;
+    padding: 0 20px;
+    background: #f7f7f7;
+    overflow-x: hidden;
   }
 
-  .reveal {
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    padding: 60px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     opacity: 0;
-    transform: translateX(100px);
-    transition: all 0.8s ease-out;
-    margin-bottom: 80px;
+    transform: translateX(-100px);
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
   }
 
-  .reveal.active {
+  section.visible {
     opacity: 1;
     transform: translateX(0);
   }
 
-  h2 {
+  section.hidden-right {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+
+  h1, h2 {
     color: #333;
+  }
+
+  p {
+    color: #555;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.6;
   }
 </style>
 </head>
 <body>
 
-  <div class="reveal">
-    <h2>Sección 1</h2>
-    <p>Este texto aparece desde la derecha al hacer scroll.</p>
-  </div>
+  <section>
+    <h1>Inicio</h1>
+    <p>Todo el contenido aparece desde la izquierda y desaparece hacia la derecha al hacer scroll.</p>
+  </section>
 
-  <div class="reveal">
+  <section>
     <h2>Sección 2</h2>
-    <p>Otra animación suave desde la derecha.</p>
-  </div>
+    <p>Observa cómo este bloque entra suavemente al bajar y se desvanece al seguir desplazándote.</p>
+  </section>
 
-  <div class="reveal">
+  <section>
     <h2>Sección 3</h2>
-    <p>Funciona al seguir bajando la página.</p>
-  </div>
+    <p>Este efecto se aplica automáticamente a todos los elementos de la página.</p>
+  </section>
+
+  <section>
+    <h2>Final</h2>
+    <p>Todo se mueve con animaciones suaves al entrar y salir del área visible.</p>
+  </section>
 
 <script>
-function reveal() {
-  const elements = document.querySelectorAll('.reveal');
-  for (let el of elements) {
-    const windowHeight = window.innerHeight;
-    const elementTop = el.getBoundingClientRect().top;
-    if (elementTop < windowHeight - 100) {
-      el.classList.add('active');
+const sections = document.querySelectorAll("section");
+
+function handleScroll() {
+  const windowHeight = window.innerHeight;
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    const isVisible = rect.top < windowHeight * 0.8 && rect.bottom > windowHeight * 0.2;
+
+    if (isVisible) {
+      sec.classList.add("visible");
+      sec.classList.remove("hidden-right");
+    } else if (rect.top < windowHeight && rect.bottom < windowHeight * 0.2) {
+      // se va hacia la derecha al desaparecer
+      sec.classList.add("hidden-right");
+      sec.classList.remove("visible");
+    } else {
+      // al volver arriba, vuelve a su estado inicial (izquierda)
+      sec.classList.remove("visible", "hidden-right");
     }
-  }
+  });
 }
-window.addEventListener('scroll', reveal);
-reveal();
+
+window.addEventListener("scroll", handleScroll);
+handleScroll();
 </script>
+
 </body>
 </html>
