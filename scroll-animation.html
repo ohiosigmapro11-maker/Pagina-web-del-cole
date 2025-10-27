@@ -29,7 +29,7 @@
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translateX(-80px);
     transition: transform 0.8s ease-out, opacity 0.8s ease-out;
   }
 
@@ -59,22 +59,22 @@
 
   <section>
     <h1>Inicio</h1>
-    <p>Todo el contenido aparece desde la izquierda y desaparece hacia la derecha al hacer scroll.</p>
+    <p>Ahora los elementos se mueven cuando entran en pantalla, no cuando ya se fueron.</p>
   </section>
 
   <section>
     <h2>Sección 2</h2>
-    <p>Observa cómo este bloque entra suavemente al bajar y se desvanece al seguir desplazándote.</p>
+    <p>El movimiento comienza justo al empezar a verse en la parte inferior de la pantalla.</p>
   </section>
 
   <section>
     <h2>Sección 3</h2>
-    <p>Este efecto se aplica automáticamente a todos los elementos de la página.</p>
+    <p>También desaparecen hacia la derecha cuando salen por arriba del todo.</p>
   </section>
 
   <section>
     <h2>Final</h2>
-    <p>Todo se mueve con animaciones suaves al entrar y salir del área visible.</p>
+    <p>Así puedes ver claramente cada animación al desplazarte por la página.</p>
   </section>
 
 <script>
@@ -82,19 +82,22 @@ const sections = document.querySelectorAll("section");
 
 function handleScroll() {
   const windowHeight = window.innerHeight;
+
   sections.forEach(sec => {
     const rect = sec.getBoundingClientRect();
-    const isVisible = rect.top < windowHeight * 0.8 && rect.bottom > windowHeight * 0.2;
 
-    if (isVisible) {
+    // Si está entrando al viewport
+    if (rect.top < windowHeight - 50 && rect.bottom > 50) {
       sec.classList.add("visible");
       sec.classList.remove("hidden-right");
-    } else if (rect.top < windowHeight && rect.bottom < windowHeight * 0.2) {
-      // se va hacia la derecha al desaparecer
+    } 
+    // Si ya se fue hacia arriba
+    else if (rect.bottom <= 0) {
       sec.classList.add("hidden-right");
       sec.classList.remove("visible");
-    } else {
-      // al volver arriba, vuelve a su estado inicial (izquierda)
+    } 
+    // Si aún no entra
+    else if (rect.top >= windowHeight) {
       sec.classList.remove("visible", "hidden-right");
     }
   });
