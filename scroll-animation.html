@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Animación scroll derecha</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 40px;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.8s ease-out;
+    margin-bottom: 80px;
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  h2 {
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+  <div class="reveal">
+    <h2>Sección 1</h2>
+    <p>Este texto aparece desde la derecha al hacer scroll.</p>
+  </div>
+
+  <div class="reveal">
+    <h2>Sección 2</h2>
+    <p>Otra animación suave desde la derecha.</p>
+  </div>
+
+  <div class="reveal">
+    <h2>Sección 3</h2>
+    <p>Funciona al seguir bajando la página.</p>
+  </div>
+
+<script>
+function reveal() {
+  const elements = document.querySelectorAll('.reveal');
+  for (let el of elements) {
+    const windowHeight = window.innerHeight;
+    const elementTop = el.getBoundingClientRect().top;
+    if (elementTop < windowHeight - 100) {
+      el.classList.add('active');
+    }
+  }
+}
+window.addEventListener('scroll', reveal);
+reveal();
+</script>
+</body>
+</html>
